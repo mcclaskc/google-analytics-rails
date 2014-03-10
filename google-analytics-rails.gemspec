@@ -4,7 +4,7 @@ require "google-analytics/version"
 
 Gem::Specification.new do |s|
   s.name        = "google-analytics-rails"
-  s.version     = GoogleAnalytics::VERSION
+  s.version     = "0.0.51"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Benoit Garret"]
   s.email       = ["benoit.garret@gadz.org"]

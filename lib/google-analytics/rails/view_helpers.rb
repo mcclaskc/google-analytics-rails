@@ -53,6 +53,8 @@ module GoogleAnalytics::Rails
     # @param options [Hash]
     # @option options [Boolean] :local (false) Sets the local development mode.
     #   See {http://www.google.com/support/forum/p/Google%20Analytics/thread?tid=741739888e14c07a&hl=en}
+    # @option options [Array, GA::Events::SetCustomVar] :custom_vars ([])
+    #   See {http://code.google.com/apis/analytics/docs/tracking/gaTrackingCustomVariables.html}
     # @option options [Array, GoogleAnalytics::Event] :add_events ([])
     #   The page views are tracked by default, additional events can be added here.
     # @option options [String] :page
@@ -84,6 +86,7 @@ module GoogleAnalytics::Rails
       end
 
       local = options.delete(:local) || false
+      custom_vars = options.delete(:custom_vars) || false
       anonymize = options.delete(:anonymize) || false
       link_attribution = options.delete(:enhanced_link_attribution) || false
       domain = options.delete(:domain) || (local ? "none" : "auto")
@@ -99,6 +102,11 @@ module GoogleAnalytics::Rails
       events.unshift GA::Events::SetDomainName.new(domain)
       if local
         events.unshift GA::Events::SetAllowLinker.new(true)
+      end
+      if custom_vars
+        custom_vars.each do |custom_var|
+          events.unshift custom_var
+        end
       end
       events.unshift GA::Events::SetAccount.new(tracker)
       events.unshift GA::Events::Require.new(
